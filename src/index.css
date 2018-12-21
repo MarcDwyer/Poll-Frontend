@@ -87,3 +87,7 @@ input ::placeholder {
   bottom: 15px;
   right: 15px;
 }
+
+.redder {
+  border-bottom: 1px solid red !important;
+}

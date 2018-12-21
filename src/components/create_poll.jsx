@@ -77,11 +77,11 @@ export default class CreatePost extends Component {
             <div className="check">
             <form onSubmit={this.handleSubmit}>
             <div className="row">
-    <div className="input-field col s12">
-      <input name="title" value={this.state.title} id="first_name2" type="text" onChange={this.handleChange} autoComplete="off" />
-      <label className="active">Enter a title</label>
-    </div>
-  </div>
+            <div className="input-field col s12">
+                 <input name="title" value={this.state.title} type="text" onChange={this.handleChange} autoComplete="off" className={this.state.error ? "redder": ""} />
+                  <label className="active">Enter a title</label>
+                    </div>
+                    </div>
             <ul className="marginthis">
             {this.renderInput()}
             </ul>
@@ -105,7 +105,7 @@ export default class CreatePost extends Component {
                 return (
                     <div key={i} className="row">
                     <div className="input-field col s12">
-                 <input value={this.state[item]} id={`item${i}`} type="text" className="validate" name={item} onChange={this.handleChange} placeholder={`Questions #${i + 1}`} autoComplete="off"  />
+                 <input value={this.state[item]} className={this.state.error ? "redder" : ""} type="text"  name={item} onChange={this.handleChange} placeholder={this.state.error || `Questions #${i + 1}`} autoComplete="off"  />
                     </div>
                 </div>
                 )
@@ -114,6 +114,11 @@ export default class CreatePost extends Component {
     }
     handleSubmit = async (e) => {
         e.preventDefault()
+        const { quest0, quest1, title } = this.state
+        if (quest0.length === 0 || quest1.length === 0 || title.length === 0) {
+            this.setState({error: "Please enter questions"})
+            return
+        }
         const sort = Object.keys(this.state).filter(item => item.startsWith('quest'))
 
        const submitted = sort.filter((item) => {
@@ -139,5 +144,3 @@ export default class CreatePost extends Component {
         this.setState({id: fetchRes, isComplete: true, quest0: '', quest1: '', quest2: '', quest3: '', quest4: ''})
     }
 }
-
-
