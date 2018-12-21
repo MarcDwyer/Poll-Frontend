@@ -52,7 +52,7 @@ export default class CreatePost extends Component {
             <div className="contained">
             <div className="poll">
             <h4>Poll Submitted</h4>
-            <div className="actualpoll">
+
             <div className="check">
             <i className="fa fa-check" />
             <CopyToClipboard text={this.state.value}
@@ -62,7 +62,7 @@ export default class CreatePost extends Component {
             </div>
             <Link to={`/poll/survey/${this.state.id}`} className="waves-effect waves-light btn pollbtn">View Poll</Link>
             </div>
-            </div>
+
             </div>
             </div>
             ) 
