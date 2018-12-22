@@ -59,7 +59,10 @@ input ::placeholder {
   flex-direction: column;
   margin-left: auto;
   margin-right: auto;
-  height: 275px;
+  height: 100%;
+}
+.complete {
+  height: 250px;
 }
 .check i {
   color: #7FBF7F;

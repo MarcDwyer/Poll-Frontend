@@ -53,7 +53,7 @@ export default class CreatePost extends Component {
             <div className="poll">
             <h4>Poll Submitted</h4>
 
-            <div className="check">
+            <div className="check complete">
             <i className="fa fa-check" />
             <CopyToClipboard text={this.state.value}
             onCopy={() => this.setState({copied: true})} text={`${window.location.host}/poll/survey/${this.state.id}`} >

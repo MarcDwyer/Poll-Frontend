@@ -10,7 +10,7 @@ export default class Poll extends Component {
             isComplete: false,
             submitted: null,
             questions: null,
-            ws: new WebSocket(`ws://${document.location.hostname}:5000/sockets/${this.props.match.params.id}`)
+            ws: new WebSocket(`wss://${document.location.host}/sockets/${this.props.match.params.id}`)
         }
     }
     componentWillUnmount() {
@@ -29,13 +29,14 @@ export default class Poll extends Component {
     }
     render() {
        const { ws } = this.state
-        if (!this.state.questions || ws.readyState !== 1) {
+        if (!this.state.questions) {
+            console.log('balls', this.state)
             return (
                 <div>
                     <Nav />
                     <div className="contained">
                     <div className="preloader-wrapper big active">
-    <div className="spinner-layer spinner-blue-only">
+      <div className="spinner-layer spinner-blue-only">
       <div className="circle-clipper left">
         <div className="circle"></div>
       </div><div className="gap-patch">
@@ -49,6 +50,7 @@ export default class Poll extends Component {
                 </div>
             )
         } 
+        console.log("weel", this.state)
         return (
             <div>
                 <Nav />
