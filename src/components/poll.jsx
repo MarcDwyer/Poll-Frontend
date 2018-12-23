@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import uuid from 'uuid'
 import Nav from './nav'
-
+import { CopyToClipboard } from 'react-copy-to-clipboard'
 export default class Poll extends Component {
     constructor(props) {
         super(props)
@@ -10,7 +10,7 @@ export default class Poll extends Component {
             isComplete: false,
             submitted: null,
             questions: null,
-            ws: new WebSocket(`wss://${document.location.host}/sockets/${this.props.match.params.id}`)
+            ws: new WebSocket(`ws://${document.location.hostname}:5000/sockets/${this.props.match.params.id}`)
         }
     }
     componentWillUnmount() {
@@ -50,7 +50,6 @@ export default class Poll extends Component {
                 </div>
             )
         } 
-        console.log("weel", this.state)
         return (
             <div>
                 <Nav />
@@ -64,6 +63,10 @@ export default class Poll extends Component {
             </ul>
             <button type="submit" className="waves-effect waves-light btn pollbtn">Submit Answer</button>
             </form>
+            <CopyToClipboard text={this.state.value}
+            onCopy={() => this.setState({copied: true})} text={`https://${window.location.host}/poll/survey/${this.props.match.params.id}`} >
+          <button className="waves-effect waves-light btn purple accent-1 copy">Click to copy post url</button>
+        </CopyToClipboard>
             </div>
             </div>
             </div>
@@ -102,7 +105,7 @@ export default class Poll extends Component {
         return filtered.map(({ question }, index) => {
             if (!question) return
             return (
-            <p key={uuid()}>
+            <p key={uuid()} className="pollquest">
               <label>
                 <input name={`quest${index}`} type="radio" checked={this.state.isChecked === `quest${index}`}  onChange={this.handleChange} />
                 <span>{question}</span>
