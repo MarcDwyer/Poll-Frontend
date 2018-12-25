@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import uuid from 'uuid'
 import Nav from './nav'
-
+import { Input } from 'react-materialize'
 export default class Poll extends Component {
     constructor(props) {
         super(props)
@@ -10,7 +10,7 @@ export default class Poll extends Component {
             isComplete: false,
             submitted: null,
             questions: null,
-            ws: new WebSocket(`wss://${document.location.host}/sockets/${this.props.match.params.id}`)
+            ws: new WebSocket(`ws://${document.location.hostname}:5000/sockets/${this.props.match.params.id}`)
         }
     }
     componentWillUnmount() {
@@ -30,7 +30,6 @@ export default class Poll extends Component {
     render() {
        const { ws } = this.state
         if (!this.state.questions) {
-            console.log('balls', this.state)
             return (
                 <div>
                     <Nav />
@@ -50,7 +49,6 @@ export default class Poll extends Component {
                 </div>
             )
         } 
-        console.log("weel", this.state)
         return (
             <div>
                 <Nav />
@@ -62,7 +60,9 @@ export default class Poll extends Component {
             <ul> 
                 {this.renderQuestions()}
             </ul>
+            <div className="resp-buttons">
             <button type="submit" className="waves-effect waves-light btn pollbtn">Submit Answer</button>
+            </div>
             </form>
             </div>
             </div>
@@ -102,12 +102,9 @@ export default class Poll extends Component {
         return filtered.map(({ question }, index) => {
             if (!question) return
             return (
-            <p key={uuid()}>
-              <label>
-                <input name={`quest${index}`} type="radio" checked={this.state.isChecked === `quest${index}`}  onChange={this.handleChange} />
-                <span>{question}</span>
-              </label>
-            </p>
+            <div key={uuid()} className="pollquest">
+                <Input name={`quest${index}`} type="radio" checked={this.state.isChecked === `quest${index}`}  onChange={this.handleChange} label={question} />
+            </div>
             )
         })
     }

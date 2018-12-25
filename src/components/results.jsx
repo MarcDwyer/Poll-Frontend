@@ -10,7 +10,7 @@ export default class Results extends Component {
             super(props)
             this.state = {
                 questions: null,
-                ws: new WebSocket(`wss://${document.location.host}/sockets/${this.props.match.params.id}`),
+                ws: new WebSocket(`ws://${document.location.hostname}:5000/sockets/${this.props.match.params.id}`),
                 socketData: null
             }
         }
@@ -58,11 +58,13 @@ export default class Results extends Component {
                     {this.renderResults()}
                     </ul>
                     </div>
+                    <div className="resp-buttons">
                     <Link to="/" className="waves-effect waves-light btn pollbtn">Create new poll</Link>
                     <CopyToClipboard text={this.state.value}
-                           onCopy={() => this.setState({copied: true})} text={`${document.location.host}/poll/results/${this.props.match.params.id}`} >
-                          <button className="waves-effect waves-light btn purple accent-1 copyres">Copy url to clipboard</button>
+                           onCopy={() => this.setState({copied: true})} text={`https://${document.location.host}/poll/survey/${this.props.match.params.id}`} >
+                          <button className="waves-effect waves-light btn purple accent-1 copyres copy">Copy url to clipboard</button>
                          </CopyToClipboard>
+                         </div>
                     </div>
                     </div>
                     </div>

@@ -52,15 +52,14 @@ export default class CreatePost extends Component {
             <div className="contained">
             <div className="poll">
             <h4>Poll Submitted</h4>
-
-            <div className="check complete">
             <i className="fa fa-check" />
+            <div className="resp-buttons">
+            <Link to={`/poll/survey/${this.state.id}`} className="waves-effect waves-light btn pollbtn">View Poll</Link>
             <CopyToClipboard text={this.state.value}
-            onCopy={() => this.setState({copied: true})} text={`${window.location.host}/poll/survey/${this.state.id}`} >
+            onCopy={() => this.setState({copied: true})} text={`https://${window.location.host}/poll/survey/${this.state.id}`} >
           <button className="waves-effect waves-light btn purple accent-1 copy">Click to copy post url</button>
         </CopyToClipboard>
             </div>
-            <Link to={`/poll/survey/${this.state.id}`} className="waves-effect waves-light btn pollbtn">View Poll</Link>
             </div>
 
             </div>
@@ -85,7 +84,9 @@ export default class CreatePost extends Component {
             <ul className="marginthis">
             {this.renderInput()}
             </ul>
+            <div className="resp-buttons">
             <button className="waves-effect waves-light btn pollbtn">Submit poll</button>
+            </div>
             </form>
             </div>
             </div>
@@ -104,7 +105,7 @@ export default class CreatePost extends Component {
             if (i < this.state.number) {
                 return (
                     <div key={i} className="row">
-                    <div className="input-field col s12">
+                    <div className="input-field col s10">
                  <input value={this.state[item]} className={this.state.error ? "redder" : ""} type="text"  name={item} onChange={this.handleChange} placeholder={this.state.error || `Questions #${i + 1}`} autoComplete="off"  />
                     </div>
                 </div>
