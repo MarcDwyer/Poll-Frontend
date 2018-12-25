@@ -62,7 +62,7 @@ export default class Poll extends Component {
                 {this.renderQuestions()}
             </ul>
             <div className="resp-buttons">
-            <button type="submit" className="waves-effect waves-light btn pollbtn">Submit Answer</button>
+            <button type="submit" className="waves-effect waves-light btn pollbtn">Submit Answer!</button>
             </div>
             </form>
             <CopyToClipboard text={this.state.value}
