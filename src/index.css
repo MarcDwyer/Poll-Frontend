@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 
 body {
   margin: 0;
@@ -8,6 +9,12 @@ nav {
   box-shadow: none;
   background-color: #ea80fc;
 }
+=======
+body {
+  overflow: hidden;
+}
+
+>>>>>>> 2613643084cf254a8026feee5cf762a82c125b71
 .contained {
   background-color: #9FA5B5;
   display: flex;
@@ -23,11 +30,15 @@ nav {
   flex-direction: column;
   width: 550px;
   min-height: 450px;
+<<<<<<< HEAD
   margin: 125px auto auto auto;
+=======
+  margin: 150px auto auto auto;
+>>>>>>> 2613643084cf254a8026feee5cf762a82c125b71
   border: solid 1px #D6D6D6;
   position: relative;
   background-color: white;
-  border-radius: 10px;
+
   overflow: hidden;
 }
 

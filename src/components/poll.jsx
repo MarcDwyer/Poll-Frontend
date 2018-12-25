@@ -64,6 +64,10 @@ export default class Poll extends Component {
             <button type="submit" className="waves-effect waves-light btn pollbtn">Submit Answer</button>
             </div>
             </form>
+            <CopyToClipboard text={this.state.value}
+            onCopy={() => this.setState({copied: true})} text={`https://${window.location.host}/poll/survey/${this.props.match.params.id}`} >
+          <button className="waves-effect waves-light btn purple accent-1 copy">Click to copy post url</button>
+        </CopyToClipboard>
             </div>
             </div>
             </div>
