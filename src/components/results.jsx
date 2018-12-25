@@ -10,7 +10,7 @@ export default class Results extends Component {
             super(props)
             this.state = {
                 questions: null,
-                ws: new WebSocket(`ws://${document.location.hostname}:5000/sockets/${this.props.match.params.id}`),
+                ws: new WebSocket(`wss://${document.location.host}/sockets/${this.props.match.params.id}`),
                 socketData: null
             }
         }
