@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import uuid from 'uuid'
 import Nav from './nav'
 import { Input } from 'react-materialize'
+import { CopyToClipboard } from 'react-copy-to-clipboard'
 export default class Poll extends Component {
     constructor(props) {
         super(props)
