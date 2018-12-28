@@ -2,8 +2,9 @@ import React, { Component } from 'react'
 import Nav from './nav'
 import { Link } from 'react-router-dom'
 import { CopyToClipboard } from 'react-copy-to-clipboard';
+import { Dropdown, Button, NavItem } from 'react-materialize'
 import update from 'immutability-helper';
-import uuid from 'uuid'
+import { Bar } from 'react-chartjs-2';
 export default class Results extends Component {
 
         constructor(props) {
@@ -60,10 +61,16 @@ export default class Results extends Component {
                     </div>
                     <div className="resp-buttons">
                     <Link to="/" className="waves-effect waves-light btn pollbtn">Create new poll</Link>
+                    <div className="share">
+                    <Dropdown trigger={
+                          <Button className="btn purple accent-1">Share</Button>
+                      }>
                     <CopyToClipboard text={this.state.value}
                            onCopy={() => this.setState({copied: true})} text={`https://${document.location.host}/poll/survey/${this.props.match.params.id}`} >
-                          <button className="waves-effect waves-light btn purple accent-1 copyres copy">Copy url to clipboard</button>
+                                               <NavItem>Copy url</NavItem>
                          </CopyToClipboard>
+                        </Dropdown>
+                        </div>
                          </div>
                     </div>
                     </div>
@@ -83,14 +90,40 @@ export default class Results extends Component {
             }
 
             const filtered = Object.values(questions).filter(item => item.question);
-            return filtered.map(({ question, count }) => {
-                return (
-                    <li key={uuid()} className="thevotes">
-                        <span>{question}</span>
-                        <span className="votes">{count} Votes</span>
-                    </li>
-                )
-            })
+            const question = filtered.map(item => item.question)
+            const count = filtered.map(item => item.count)
+            const total = filtered.reduce((total, item) => {
+                return total += item.count
+            }, 0)
+            const data = {
+                labels: question,
+                datasets: [
+                  {
+                    label: questions.title,
+                    backgroundColor: 'rgba(159,191,112,0.4)',
+                    borderColor: 'rgba(111,133,78,1)',
+                    borderWidth: 1,
+                    hoverBackgroundColor: 'rgba(159,191,112,.8)',
+                    hoverBorderColor: 'rgba(111,133,78,1)',
+                    data: count
+                  }
+                ]
+              };
+              const options = {
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero: true,
+                                suggestedMin: 0,
+                                suggestedMax: total,
+                                stepSize: 1
+                            }
+                        }]
+                    }
+                }
+            return (
+                <Bar data={data} options={options} />
+            )
             
         }
 }
