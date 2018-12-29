@@ -12,7 +12,8 @@ export default class Results extends Component {
             this.state = {
                 questions: null,
                 ws: new WebSocket(`wss://${document.location.host}/sockets/${this.props.match.params.id}`),
-                socketData: null
+                socketData: null,
+                copied: false
             }
         }
         componentWillUnmount() {
@@ -47,6 +48,7 @@ export default class Results extends Component {
         }
     }
         render() {
+
                 return (
                     <div>
                     <Nav />
@@ -65,9 +67,9 @@ export default class Results extends Component {
                     <Dropdown trigger={
                           <Button className="btn purple accent-1">Share</Button>
                       }>
-                    <CopyToClipboard text={this.state.value}
-                           onCopy={() => this.setState({copied: true})} text={`https://${document.location.host}/poll/survey/${this.props.match.params.id}`} >
-                                               <NavItem>Copy url</NavItem>
+                    <CopyToClipboard
+                           text={`https://${document.location.host}/poll/survey/${this.props.match.params.id}`} >
+                           <NavItem>Copy url</NavItem>
                          </CopyToClipboard>
                         </Dropdown>
                         </div>
@@ -100,11 +102,11 @@ export default class Results extends Component {
                 datasets: [
                   {
                     label: questions.title,
-                    backgroundColor: 'rgba(159,191,112,0.4)',
-                    borderColor: 'rgba(111,133,78,1)',
+                    backgroundColor: 'rgba(153,210,227,0.4)',
+                    borderColor: 'rgba(122,168,181,1)',
                     borderWidth: 1,
-                    hoverBackgroundColor: 'rgba(159,191,112,.8)',
-                    hoverBorderColor: 'rgba(111,133,78,1)',
+                    hoverBackgroundColor: 'rgba(153,210,227,.85)',
+                    hoverBorderColor: 'rgba(122,168,181,1)',
                     data: count
                   }
                 ]

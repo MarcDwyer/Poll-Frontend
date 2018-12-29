@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import uuid from 'uuid'
 import Nav from './nav'
-import { Input } from 'react-materialize'
 export default class Poll extends Component {
     constructor(props) {
         super(props)
@@ -28,7 +27,6 @@ export default class Poll extends Component {
             this.setState({questions: pollData})
     }
     render() {
-       const { ws } = this.state
         if (!this.state.questions) {
             return (
                 <div>
@@ -79,6 +77,7 @@ export default class Poll extends Component {
             _id: this.props.match.params.id,
             question: this.state.isChecked
         }
+        try {
         const updateFetch = await fetch('/api/update', {
             method: 'POST',
             headers:{
@@ -93,6 +92,9 @@ export default class Poll extends Component {
                 this.props.history.push(`/poll/results/${this.state.questions.Id}`)
             })
         }
+    } catch(err) {
+        console.log(err)
+    }
 
     }
     renderQuestions = () => {
@@ -100,11 +102,13 @@ export default class Poll extends Component {
         const filtered = Object.values(questions).filter(item => item.question);
 
         return filtered.map(({ question }, index) => {
-            if (!question) return
             return (
-            <div key={uuid()} className="pollquest">
-                <Input name={`quest${index}`} type="radio" checked={this.state.isChecked === `quest${index}`}  onChange={this.handleChange} label={question} />
-            </div>
+                <p key={uuid()} className="pollquest">
+                <label for={`quest${index}`}>
+                <input id={`quest${index}`} name={`quest${index}`} type="radio" checked={this.state.isChecked === `quest${index}`} onChange={this.handleChange}  />
+                  <span>{question}</span>
+                </label>
+              </p>
             )
         })
     }
