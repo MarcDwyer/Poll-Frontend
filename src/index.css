@@ -139,6 +139,9 @@ input ::placeholder {
 .dropdown-content * {
   z-index: 1000;
 }
+.results {
+  width: 100%;
+}
 @media (max-width: 550px) {
   .poll {
     width: 100%;

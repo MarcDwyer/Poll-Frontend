@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { Dropdown, Button, NavItem } from 'react-materialize'
 import update from 'immutability-helper';
-import { Bar } from 'react-chartjs-2';
+import { HorizontalBar } from 'react-chartjs-2';
 export default class Results extends Component {
 
         constructor(props) {
@@ -53,7 +53,7 @@ export default class Results extends Component {
                     <div>
                     <Nav />
                     <div className="contained">
-                    <div className="poll">
+                    <div className="poll result">
                     <h4>The results are in!</h4>
                     <div className="actualpoll">
                     <div className="check">
@@ -92,7 +92,7 @@ export default class Results extends Component {
             }
 
             const filtered = Object.values(questions).filter(item => item.question);
-            const question = filtered.map(item => item.question)
+            const question = filtered.map(item => `${item.question}`)
             const count = filtered.map(item => item.count)
             const total = filtered.reduce((total, item) => {
                 return total += item.count
@@ -113,18 +113,17 @@ export default class Results extends Component {
               };
               const options = {
                     scales: {
-                        yAxes: [{
+                        xAxes: [{
                             ticks: {
                                 beginAtZero: true,
                                 suggestedMin: 0,
-                                suggestedMax: total,
-                                stepSize: 1
+                                suggestedMax: total
                             }
                         }]
                     }
                 }
             return (
-                <Bar data={data} options={options} />
+                <HorizontalBar data={data} options={options} />
             )
             
         }
