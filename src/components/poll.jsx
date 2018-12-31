@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import uuid from 'uuid'
 import Nav from './nav'
+import { Input } from 'react-materialize'
 export default class Poll extends Component {
     constructor(props) {
         super(props)
@@ -9,7 +10,8 @@ export default class Poll extends Component {
             isComplete: false,
             submitted: null,
             questions: null,
-            ws: new WebSocket(`wss://${document.location.host}/sockets/${this.props.match.params.id}`)
+            ws: new WebSocket(`wss://${document.location.host}/sockets/${this.props.match.params.id}`),
+            error: null
         }
     }
     componentWillUnmount() {
@@ -47,12 +49,13 @@ export default class Poll extends Component {
                 </div>
             )
         } 
+        const error = this.state.error ? this.state.error :'';
         return (
             <div>
                 <Nav />
             <div className="contained">
             <div className="poll">
-            <h4>{this.state.questions.title}</h4>
+            <h4>{this.state.questions.title} <br /><small>{error}</small></h4>
             <div className="actualpoll">
             <form onSubmit={this.handleSubmit}>
             <ul> 
@@ -73,6 +76,7 @@ export default class Poll extends Component {
     }
     handleSubmit = async (e) => {
         e.preventDefault()
+        if (this.state.error) return
         const payload = {
             _id: this.props.match.params.id,
             question: this.state.isChecked
@@ -85,7 +89,13 @@ export default class Poll extends Component {
               },
               body: JSON.stringify(payload)
         })
-        if (updateFetch.status === 200) {
+        const received = await updateFetch.json()
+        if (received.status) {
+            console.log(received)
+            this.setState({error: "Duplicate ip detected"})
+            return
+        } else {
+            console.log(received)
             const { isChecked, questions } = this.state
             this.setState({isComplete: true, submitted: questions[isChecked]}, () => {
                 this.state.ws.send(JSON.stringify(payload))
@@ -102,13 +112,11 @@ export default class Poll extends Component {
         const filtered = Object.values(questions).filter(item => item.question);
 
         return filtered.map(({ question }, index) => {
+            if (!question) return
             return (
-                <p key={uuid()} className="pollquest">
-                <label for={`quest${index}`}>
-                <input id={`quest${index}`} name={`quest${index}`} type="radio" checked={this.state.isChecked === `quest${index}`} onChange={this.handleChange}  />
-                  <span>{question}</span>
-                </label>
-              </p>
+            <div key={uuid()} className="pollquest">
+                <Input name={`quest${index}`} type="radio" checked={this.state.isChecked === `quest${index}`}  onChange={this.handleChange} label={question} />
+            </div>
             )
         })
     }

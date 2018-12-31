@@ -26,7 +26,6 @@ export default class CreatePost extends Component {
     }
     componentDidUpdate(prevProps, prevState) {
         //checks to see if all inputs have a value... it they do, another input tag is displayed
-    (() => {
         const { number } = this.state;
         const path = `quest${number - 1}`
         if (!this.state[path] || this.state[path].length === 0) return;
@@ -43,7 +42,6 @@ export default class CreatePost extends Component {
          if (ch === this.state.number) {
             this.setState({number: this.state.number + 1})
         }
-    })() 
     }
     render() {
         if (this.state.isComplete) {
@@ -72,7 +70,7 @@ export default class CreatePost extends Component {
             <Nav />
             <div className="contained">
             <div className="poll">
-            <h4>Create a poll</h4>
+            <h4>{this.state.error ? this.state.error : 'Create a poll'}</h4>
             <div className="actualpoll">
             <div className="check">
             <form onSubmit={this.handleSubmit}>
@@ -163,14 +161,18 @@ export default class CreatePost extends Component {
             obj.title = this.state.title
            return obj
         }, {})
-        const postFetch = await fetch('/api/create', {
-            method: 'POST',
-            headers:{
-                'Content-Type': 'application/json'
-              },
-            body: JSON.stringify(submitted)
-        })
-        const fetchRes = await postFetch.json()
-        this.setState({id: fetchRes, isComplete: true, quest0: '', quest1: '', quest2: '', quest3: '', quest4: ''})
+        try {
+            const postFetch = await fetch('/api/create', {
+                method: 'POST',
+                headers:{
+                    'Content-Type': 'application/json'
+                  },
+                body: JSON.stringify(submitted)
+            })
+            const fetchRes = await postFetch.json()
+            this.setState({id: fetchRes, isComplete: true, quest0: '', quest1: '', quest2: '', quest3: '', quest4: ''})
+            } catch(err) {
+                console.log(err)
+            }
     }
 }

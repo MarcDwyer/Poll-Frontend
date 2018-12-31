@@ -141,7 +141,10 @@ input ::placeholder {
 }
 @media (max-width: 550px) {
   .poll {
-    width: 375px;
+    width: 100%;
+    height: calc(100vh - 55px);
+    margin: 0;
+    border-radius: 0;
   }
   .resp-buttons {
     left: 0;
@@ -152,5 +155,14 @@ input ::placeholder {
   }
   .copy {
     margin: 0;
+  }
+  .rc-anchor {
+    display: none;
+  }
+  .grecaptcha-badge {
+    display: none;
+  }
+  .share span button {
+    width: 100%;
   }
 }

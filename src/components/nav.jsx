@@ -16,7 +16,9 @@ export default class Nav extends React.Component {
     <ul>
       <li style={{listStyle: "circle", marginLeft: '15px'}}>Web Sockets update you in real time</li>
       <li style={{listStyle: "circle", marginLeft: '15px'}}>Polls saved to Mongodb for persisted data</li>
+      <li style={{listStyle: "circle", marginLeft: '15px'}}>Ip duplication check and Google's recaptcha v3</li>
       <li style={{listStyle: "circle", marginLeft: '15px'}}>Making a poll is so easy you dont even notice how good it is</li>
+      
     </ul>
 </Modal>
           </li>

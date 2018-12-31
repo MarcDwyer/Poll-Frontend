@@ -65,7 +65,7 @@ export default class Results extends Component {
                     <Link to="/" className="waves-effect waves-light btn pollbtn">Create new poll</Link>
                     <div className="share">
                     <Dropdown trigger={
-                          <Button className="btn purple accent-1">Share</Button>
+                          <Button className="btn purple accent-1 pollbtn">Share</Button>
                       }>
                     <CopyToClipboard
                            text={`https://${document.location.host}/poll/survey/${this.props.match.params.id}`} >
