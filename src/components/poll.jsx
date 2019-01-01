@@ -112,7 +112,7 @@ export default class Poll extends Component {
         const filtered = Object.values(questions).filter(item => item.question);
 
         return filtered.map(({ question }, index) => {
-            if (!question) return
+            if (!question) return null
             return (
             <div key={uuid()} className="pollquest">
                 <Input name={`quest${index}`} type="radio" checked={this.state.isChecked === `quest${index}`}  onChange={this.handleChange} label={question} />
