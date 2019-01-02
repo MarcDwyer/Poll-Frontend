@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import uuid from 'uuid'
-import Nav from './nav'
 import { Input } from 'react-materialize'
 export default class Poll extends Component {
     constructor(props) {
@@ -18,21 +17,24 @@ export default class Poll extends Component {
         this.state.ws.close()
     }
     async componentDidMount() {
-        const pollFetch = await fetch('/api/getpoll', {
-            method: 'POST',
-            headers:{
-                'Content-Type': 'application/json'
-              },
-              body: JSON.stringify(this.props.match.params.id)
-            })
-         const pollData = await pollFetch.json()
-            this.setState({questions: pollData})
+        try {
+            const pollFetch = await fetch('/api/getpoll', {
+                method: 'POST',
+                headers:{
+                    'Content-Type': 'application/json'
+                  },
+                  body: JSON.stringify(this.props.match.params.id)
+                })
+             const pollData = await pollFetch.json()
+                this.setState({questions: pollData})
+        } catch(err) {
+            console.log(err)
+        }
     }
     render() {
         if (!this.state.questions) {
             return (
                 <div>
-                    <Nav />
                     <div className="contained">
                     <div className="preloader-wrapper big active">
       <div className="spinner-layer spinner-blue-only">
@@ -52,20 +54,21 @@ export default class Poll extends Component {
         const error = this.state.error ? this.state.error :'';
         return (
             <div>
-                <Nav />
             <div className="contained">
             <div className="poll">
             <h4>{this.state.questions.title} <br /><small>{error}</small></h4>
-            <div className="actualpoll">
             <form onSubmit={this.handleSubmit}>
+            <div className="maindiv">
+            <div className="one">
             <ul> 
                 {this.renderQuestions()}
             </ul>
-            <div className="resp-buttons">
+            </div>
+            <div className="resp-buttons two">
             <button type="submit" className="waves-effect waves-light btn pollbtn">Submit Answer!</button>
             </div>
-            </form>
             </div>
+            </form>
             </div>
             </div>
             </div>

@@ -19,45 +19,27 @@ nav {
   margin-left: 15px;
 }
 .poll {
-  display: flex;
-  flex-direction: column;
   width: 550px;
-  min-height: 450px;
   margin: 125px auto auto auto;
-  border: solid 1px #D6D6D6;
-  position: relative;
   background-color: white;
   border-radius: 10px;
   overflow: visible;
+  position: relative;
 }
 
 .poll h4 {
-  margin-left: 15px
+  margin-left: 15px;
 }
 
 .brand-logo {
   margin-left: 15px;
 }
-.marginthis {
-  margin-bottom: 75px;
-}
+
 input ::placeholder {
   color: black;
   opacity: .85;
 }
 
-.actualpoll {
-  display: flex;
-  width: 100%;
-}
-.check {
-  display: flex;
-  width: 100%;
-  flex-direction: column;
-  margin-left: auto;
-  margin-right: auto;
-  height: 100%;
-}
 .complete {
   height: 250px;
 }
@@ -118,11 +100,8 @@ input ::placeholder {
 }
 .resp-buttons {
   display: flex;
+  order: 1;
   flex-wrap: wrap;
-  position: absolute;
-  bottom: 15px;
-  left: 15px;
-  width: 100%;
 }
 .share { 
   position: relative;
@@ -142,6 +121,26 @@ input ::placeholder {
 .results {
   width: 100%;
 }
+.maindiv {
+  display: flex;
+  flex-direction: column;
+}
+.one {
+  order: 0;
+  margin-bottom: 45px;
+}
+.two {
+  margin: auto 0 15px 15px;
+  order: 1;
+}
+.flexer {
+  display: flex;
+  height: 250px;
+  margin: auto;
+}
+i {
+  margin: auto;
+}
 @media (max-width: 550px) {
   .poll {
     width: 100%;
@@ -149,12 +148,16 @@ input ::placeholder {
     margin: 0;
     border-radius: 0;
   }
-  .resp-buttons {
-    left: 0;
-    bottom: 0;
+  .sharer {
+    margin-left: auto !important;
   }
-  .resp-buttons * {
-    width: 100%;
+.one {
+  order: 1;
+  margin-top: 35px;
+}
+  .two {
+    order: 0;
+    margin: 5px 5px 5px 5px;
   }
   .copy {
     margin: 0;

@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import Nav from './nav'
 import { Link } from 'react-router-dom'
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { Dropdown, Button, NavItem } from 'react-materialize'
@@ -50,22 +49,21 @@ export default class Results extends Component {
         render() {
 
                 return (
-                    <div>
-                    <Nav />
                     <div className="contained">
                     <div className="poll result">
                     <h4>The results are in!</h4>
-                    <div className="actualpoll">
-                    <div className="check">
+                    <div className="maindiv">
+                    <div className="one">
                     <ul> 
                     {this.renderResults()}
                     </ul>
                     </div>
-                    <div className="resp-buttons">
+                    </div>
+                    <div className="resp-buttons two">
                     <Link to="/" className="waves-effect waves-light btn pollbtn">Create new poll</Link>
                     <div className="share">
                     <Dropdown trigger={
-                          <Button className="btn purple accent-1 pollbtn">Share</Button>
+                          <Button className="btn purple accent-1 sharer">Share</Button>
                       }>
                     <CopyToClipboard
                            text={`https://${document.location.host}/poll/survey/${this.props.match.params.id}`} >
@@ -74,8 +72,6 @@ export default class Results extends Component {
                         </Dropdown>
                         </div>
                          </div>
-                    </div>
-                    </div>
                     </div>
                     </div>
                 )

@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { ReCaptcha } from 'react-recaptcha-v3'
-import Nav from './nav'
+
 export default class CreatePost extends Component {
     constructor(props) {
         super(props)
@@ -12,7 +12,7 @@ export default class CreatePost extends Component {
             id: null,
             title: '',
             isComplete: false,
-            copied: false,
+            copied: "Share",
             captcha: false
         }
     }
@@ -47,16 +47,22 @@ export default class CreatePost extends Component {
         if (this.state.isComplete) {
             return (
                 <div>
-                <Nav />
+
             <div className="contained">
             <div className="poll">
             <h4>Poll Submitted</h4>
+            <div className="one flexer">
             <i className="fa fa-check" />
-            <div className="resp-buttons">
+            </div>
+            <div className="resp-buttons two">
             <Link to={`/poll/survey/${this.state.id}`} className="waves-effect waves-light btn pollbtn">View Poll</Link>
             <CopyToClipboard 
             text={`https://${window.location.host}/poll/survey/${this.state.id}`} >
-          <button className="waves-effect waves-light btn purple accent-1 copy">Click to copy post url</button>
+          <button className="waves-effect waves-light btn purple accent-1 copy sharer" 
+            onClick={() => {
+                this.setState({copied: "URL Copied!"})
+            }}
+          >{this.state.copied}</button>
         </CopyToClipboard>
             </div>
             </div>
@@ -66,14 +72,13 @@ export default class CreatePost extends Component {
             ) 
         }
         return (
-            <div>
-            <Nav />
+
             <div className="contained">
             <div className="poll">
             <h4>{this.state.error ? this.state.error : 'Create a poll'}</h4>
-            <div className="actualpoll">
-            <div className="check">
             <form onSubmit={this.handleSubmit}>
+            <div className="maindiv">
+            <div className="one">
             <div className="row">
             <div className="input-field col s12">
                  <input name="title" value={this.state.title} type="text" onChange={this.handleChange} autoComplete="off" className={this.state.error ? "redder": ""} />
@@ -83,7 +88,8 @@ export default class CreatePost extends Component {
             <ul className="marginthis">
             {this.renderInput()}
             </ul>
-            <div className="resp-buttons">
+            </div>
+            <div className="resp-buttons two">
             <ReCaptcha 
             sitekey='6LeMcYUUAAAAALOdfvlBa3Fv6rwnM7G6Id_ks2Ao'
             action='action_name'
@@ -91,10 +97,8 @@ export default class CreatePost extends Component {
             />
             <button className="waves-effect waves-light btn pollbtn">Submit poll</button>
             </div>
+            </div>
             </form>
-            </div>
-            </div>
-            </div>
             </div>
             </div>
         )
