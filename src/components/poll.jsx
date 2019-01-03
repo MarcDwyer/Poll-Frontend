@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import uuid from 'uuid'
-import Nav from './nav'
 import { Input } from 'react-materialize'
 import { CopyToClipboard } from 'react-copy-to-clipboard'
 export default class Poll extends Component {
@@ -11,29 +10,32 @@ export default class Poll extends Component {
             isComplete: false,
             submitted: null,
             questions: null,
-            ws: new WebSocket(`ws://${document.location.hostname}:5000/sockets/${this.props.match.params.id}`)
+            ws: new WebSocket(`wss://${document.location.host}/sockets/${this.props.match.params.id}`),
+            error: null
         }
     }
     componentWillUnmount() {
         this.state.ws.close()
     }
     async componentDidMount() {
-        const pollFetch = await fetch('/api/getpoll', {
-            method: 'POST',
-            headers:{
-                'Content-Type': 'application/json'
-              },
-              body: JSON.stringify(this.props.match.params.id)
-            })
-         const pollData = await pollFetch.json()
-            this.setState({questions: pollData})
+        try {
+            const pollFetch = await fetch('/api/getpoll', {
+                method: 'POST',
+                headers:{
+                    'Content-Type': 'application/json'
+                  },
+                  body: JSON.stringify(this.props.match.params.id)
+                })
+             const pollData = await pollFetch.json()
+                this.setState({questions: pollData})
+        } catch(err) {
+            console.log(err)
+        }
     }
     render() {
-       const { ws } = this.state
         if (!this.state.questions) {
             return (
                 <div>
-                    <Nav />
                     <div className="contained">
                     <div className="preloader-wrapper big active">
       <div className="spinner-layer spinner-blue-only">
@@ -50,26 +52,24 @@ export default class Poll extends Component {
                 </div>
             )
         } 
+        const error = this.state.error ? this.state.error :'';
         return (
             <div>
-                <Nav />
             <div className="contained">
             <div className="poll">
-            <h4>{this.state.questions.title}</h4>
-            <div className="actualpoll">
+            <h4>{this.state.questions.title} <br /><small>{error}</small></h4>
             <form onSubmit={this.handleSubmit}>
+            <div className="maindiv">
+            <div className="one">
             <ul> 
                 {this.renderQuestions()}
             </ul>
-            <div className="resp-buttons">
+            </div>
+            <div className="resp-buttons two">
             <button type="submit" className="waves-effect waves-light btn pollbtn">Submit Answer!</button>
             </div>
-            </form>
-            <CopyToClipboard text={this.state.value}
-            onCopy={() => this.setState({copied: true})} text={`https://${window.location.host}/poll/survey/${this.props.match.params.id}`} >
-          <button className="waves-effect waves-light btn purple accent-1 copy">Click to copy post url</button>
-        </CopyToClipboard>
             </div>
+            </form>
             </div>
             </div>
             </div>
@@ -80,10 +80,12 @@ export default class Poll extends Component {
     }
     handleSubmit = async (e) => {
         e.preventDefault()
+        if (this.state.error) return
         const payload = {
             _id: this.props.match.params.id,
             question: this.state.isChecked
         }
+        try {
         const updateFetch = await fetch('/api/update', {
             method: 'POST',
             headers:{
@@ -91,13 +93,22 @@ export default class Poll extends Component {
               },
               body: JSON.stringify(payload)
         })
-        if (updateFetch.status === 200) {
+        const received = await updateFetch.json()
+        if (received.status) {
+            console.log(received)
+            this.setState({error: "Duplicate ip detected"})
+            return
+        } else {
+            console.log(received)
             const { isChecked, questions } = this.state
             this.setState({isComplete: true, submitted: questions[isChecked]}, () => {
                 this.state.ws.send(JSON.stringify(payload))
                 this.props.history.push(`/poll/results/${this.state.questions.Id}`)
             })
         }
+    } catch(err) {
+        console.log(err)
+    }
 
     }
     renderQuestions = () => {
@@ -105,7 +116,7 @@ export default class Poll extends Component {
         const filtered = Object.values(questions).filter(item => item.question);
 
         return filtered.map(({ question }, index) => {
-            if (!question) return
+            if (!question) return null
             return (
             <div key={uuid()} className="pollquest">
                 <Input name={`quest${index}`} type="radio" checked={this.state.isChecked === `quest${index}`}  onChange={this.handleChange} label={question} />

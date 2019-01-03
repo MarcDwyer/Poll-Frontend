@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import { CopyToClipboard } from 'react-copy-to-clipboard';
-import Nav from './nav'
+import { ReCaptcha } from 'react-recaptcha-v3'
+
 export default class CreatePost extends Component {
     constructor(props) {
         super(props)
@@ -11,11 +12,11 @@ export default class CreatePost extends Component {
             id: null,
             title: '',
             isComplete: false,
-            copied: false
+            copied: "Share",
+            captcha: false
         }
     }
     componentWillMount() {
-        
         for (let x = 0; x < 5; x++) {
             const path = `quest${x}`
             this.setState((state) => {
@@ -25,7 +26,6 @@ export default class CreatePost extends Component {
     }
     componentDidUpdate(prevProps, prevState) {
         //checks to see if all inputs have a value... it they do, another input tag is displayed
-    (() => {
         const { number } = this.state;
         const path = `quest${number - 1}`
         if (!this.state[path] || this.state[path].length === 0) return;
@@ -42,22 +42,27 @@ export default class CreatePost extends Component {
          if (ch === this.state.number) {
             this.setState({number: this.state.number + 1})
         }
-    })() 
     }
     render() {
         if (this.state.isComplete) {
             return (
                 <div>
-                <Nav />
+
             <div className="contained">
             <div className="poll">
             <h4>Poll Submitted</h4>
+            <div className="one flexer">
             <i className="fa fa-check" />
-            <div className="resp-buttons">
+            </div>
+            <div className="resp-buttons two">
             <Link to={`/poll/survey/${this.state.id}`} className="waves-effect waves-light btn pollbtn">View Poll</Link>
-            <CopyToClipboard text={this.state.value}
-            onCopy={() => this.setState({copied: true})} text={`https://${window.location.host}/poll/survey/${this.state.id}`} >
-          <button className="waves-effect waves-light btn purple accent-1 copy">Click to copy post url</button>
+            <CopyToClipboard 
+            text={`https://${window.location.host}/poll/survey/${this.state.id}`} >
+          <button className="waves-effect waves-light btn purple accent-1 copy sharer" 
+            onClick={() => {
+                this.setState({copied: "URL Copied!"})
+            }}
+          >{this.state.copied}</button>
         </CopyToClipboard>
             </div>
             </div>
@@ -67,14 +72,13 @@ export default class CreatePost extends Component {
             ) 
         }
         return (
-            <div>
-            <Nav />
+
             <div className="contained">
             <div className="poll">
-            <h4>Create a poll</h4>
-            <div className="actualpoll">
-            <div className="check">
+            <h4>{this.state.error ? this.state.error : 'Create a poll'}</h4>
             <form onSubmit={this.handleSubmit}>
+            <div className="maindiv">
+            <div className="one">
             <div className="row">
             <div className="input-field col s12">
                  <input name="title" value={this.state.title} type="text" onChange={this.handleChange} autoComplete="off" className={this.state.error ? "redder": ""} />
@@ -84,16 +88,38 @@ export default class CreatePost extends Component {
             <ul className="marginthis">
             {this.renderInput()}
             </ul>
-            <div className="resp-buttons">
+            </div>
+            <div className="resp-buttons two">
+            <ReCaptcha 
+            sitekey='6LeMcYUUAAAAALOdfvlBa3Fv6rwnM7G6Id_ks2Ao'
+            action='action_name'
+            verifyCallback={this.handleCB}
+            />
             <button className="waves-effect waves-light btn pollbtn">Submit poll</button>
+            </div>
             </div>
             </form>
             </div>
             </div>
-            </div>
-            </div>
-            </div>
         )
+    }
+    handleCB = async (token) => {
+        try {
+            const postToken = await fetch ('auth', {
+                headers:{
+                    'Content-Type': 'application/json'
+                  },
+                  method: 'POST',
+                  body: JSON.stringify(token)
+    
+            })
+            const res = await postToken.json()
+            if (res.success) {
+                this.setState({captcha: true})
+            }
+        } catch(err) {
+            console.log(err)
+        }
     }
     handleChange = (e) => {
         this.setState({[e.target.name]: e.target.value})
@@ -111,13 +137,17 @@ export default class CreatePost extends Component {
                 </div>
                 )
             }
+            return null
         })
     }
     handleSubmit = async (e) => {
         e.preventDefault()
-        const { quest0, quest1, title } = this.state
+        const { quest0, quest1, title, captcha } = this.state
         if (quest0.length === 0 || quest1.length === 0 || title.length === 0) {
             this.setState({error: "Please enter questions"})
+            return
+        } else if (!captcha) {
+            this.setState({error: "Captcha Auth Failed"})
             return
         }
         const sort = Object.keys(this.state).filter(item => item.startsWith('quest'))
@@ -125,7 +155,8 @@ export default class CreatePost extends Component {
        const submitted = sort.filter((item) => {
             if (this.state[item].length > 0) {
                 return this.state[item]
-            }
+            } 
+            return null
         }).map(item => {
            return {[item]: this.state[item], count: 0}
         }).reduce((obj, item, i) => {
@@ -134,14 +165,18 @@ export default class CreatePost extends Component {
             obj.title = this.state.title
            return obj
         }, {})
-        const postFetch = await fetch('/api/create', {
-            method: 'POST',
-            headers:{
-                'Content-Type': 'application/json'
-              },
-            body: JSON.stringify(submitted)
-        })
-        const fetchRes = await postFetch.json()
-        this.setState({id: fetchRes, isComplete: true, quest0: '', quest1: '', quest2: '', quest3: '', quest4: ''})
+        try {
+            const postFetch = await fetch('/api/create', {
+                method: 'POST',
+                headers:{
+                    'Content-Type': 'application/json'
+                  },
+                body: JSON.stringify(submitted)
+            })
+            const fetchRes = await postFetch.json()
+            this.setState({id: fetchRes, isComplete: true, quest0: '', quest1: '', quest2: '', quest3: '', quest4: ''})
+            } catch(err) {
+                console.log(err)
+            }
     }
 }

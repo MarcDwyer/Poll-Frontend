@@ -1,17 +1,18 @@
 import React, { Component } from 'react'
-import Nav from './nav'
 import { Link } from 'react-router-dom'
 import { CopyToClipboard } from 'react-copy-to-clipboard';
+import { Dropdown, Button, NavItem } from 'react-materialize'
 import update from 'immutability-helper';
-import uuid from 'uuid'
+import { HorizontalBar } from 'react-chartjs-2';
 export default class Results extends Component {
 
         constructor(props) {
             super(props)
             this.state = {
                 questions: null,
-                ws: new WebSocket(`ws://${document.location.hostname}:5000/sockets/${this.props.match.params.id}`),
-                socketData: null
+                ws: new WebSocket(`wss://${document.location.host}/sockets/${this.props.match.params.id}`),
+                socketData: null,
+                copied: false
             }
         }
         componentWillUnmount() {
@@ -46,27 +47,31 @@ export default class Results extends Component {
         }
     }
         render() {
+
                 return (
-                    <div>
-                    <Nav />
                     <div className="contained">
-                    <div className="poll">
+                    <div className="poll result">
                     <h4>The results are in!</h4>
-                    <div className="actualpoll">
-                    <div className="check">
+                    <div className="maindiv">
+                    <div className="one">
                     <ul> 
                     {this.renderResults()}
                     </ul>
                     </div>
-                    <div className="resp-buttons">
+                    </div>
+                    <div className="resp-buttons two">
                     <Link to="/" className="waves-effect waves-light btn pollbtn">Create new poll</Link>
-                    <CopyToClipboard text={this.state.value}
-                           onCopy={() => this.setState({copied: true})} text={`https://${document.location.host}/poll/survey/${this.props.match.params.id}`} >
-                          <button className="waves-effect waves-light btn purple accent-1 copyres copy">Copy url to clipboard</button>
+                    <div className="share">
+                    <Dropdown trigger={
+                          <Button className="btn purple accent-1 sharer">Share</Button>
+                      }>
+                    <CopyToClipboard
+                           text={`https://${document.location.host}/poll/survey/${this.props.match.params.id}`} >
+                           <NavItem>Copy url</NavItem>
                          </CopyToClipboard>
+                        </Dropdown>
+                        </div>
                          </div>
-                    </div>
-                    </div>
                     </div>
                     </div>
                 )
@@ -83,14 +88,39 @@ export default class Results extends Component {
             }
 
             const filtered = Object.values(questions).filter(item => item.question);
-            return filtered.map(({ question, count }) => {
-                return (
-                    <li key={uuid()} className="thevotes">
-                        <span>{question}</span>
-                        <span className="votes">{count} Votes</span>
-                    </li>
-                )
-            })
+            const question = filtered.map(item => `${item.question}`)
+            const count = filtered.map(item => item.count)
+            const total = filtered.reduce((total, item) => {
+                return total += item.count
+            }, 0)
+            const data = {
+                labels: question,
+                datasets: [
+                  {
+                    label: questions.title,
+                    backgroundColor: 'rgba(153,210,227,0.4)',
+                    borderColor: 'rgba(122,168,181,1)',
+                    borderWidth: 1,
+                    hoverBackgroundColor: 'rgba(153,210,227,.85)',
+                    hoverBorderColor: 'rgba(122,168,181,1)',
+                    data: count
+                  }
+                ]
+              };
+              const options = {
+                    scales: {
+                        xAxes: [{
+                            ticks: {
+                                beginAtZero: true,
+                                suggestedMin: 0,
+                                suggestedMax: total
+                            }
+                        }]
+                    }
+                }
+            return (
+                <HorizontalBar data={data} options={options} />
+            )
             
         }
 }

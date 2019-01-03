@@ -26,56 +26,34 @@ body {
   margin-left: 15px;
 }
 .poll {
-  display: flex;
-  flex-direction: column;
   width: 550px;
-  min-height: 450px;
-<<<<<<< HEAD
   margin: 125px auto auto auto;
-=======
-  margin: 150px auto auto auto;
->>>>>>> 2613643084cf254a8026feee5cf762a82c125b71
-  border: solid 1px #D6D6D6;
-  position: relative;
   background-color: white;
-
-  overflow: hidden;
+  border-radius: 10px;
+  overflow: visible;
+  position: relative;
 }
 
 .poll h4 {
-  margin-left: 15px
+  margin-left: 15px;
 }
 
 .brand-logo {
   margin-left: 15px;
 }
-.marginthis {
-  margin-bottom: 75px;
-}
+
 input ::placeholder {
   color: black;
   opacity: .85;
 }
 
-.actualpoll {
-  display: flex;
-  width: 100%;
-}
-.check {
-  display: flex;
-  width: 100%;
-  flex-direction: column;
-  margin-left: auto;
-  margin-right: auto;
-  height: 100%;
-}
 .complete {
   height: 250px;
 }
-.check i {
+.poll i {
   color: #7FBF7F;
   margin: auto;
-  font-size: 85px;
+  font-size: 105px;
 }
 .thevotes {
   display: flex;
@@ -129,28 +107,75 @@ input ::placeholder {
 }
 .resp-buttons {
   display: flex;
+  order: 1;
   flex-wrap: wrap;
-  position: absolute;
-  bottom: 15px;
-  left: 15px;
-  width: 100%;
+}
+.share { 
+  position: relative;
+  overflow: 1000;
+  margin: 0 35px 0 auto;
 }
 .copy {
   margin: 0 25px 0 auto;
-
+}
+.share btn {
+  position: absolute;
+  right: 0;
+}
+.dropdown-content * {
+  z-index: 1000;
+}
+.results {
+  width: 100%;
+}
+.maindiv {
+  display: flex;
+  flex-direction: column;
+}
+.one {
+  order: 0;
+  margin-bottom: 45px;
+}
+.two {
+  margin: auto 0 15px 15px;
+  order: 1;
+}
+.flexer {
+  display: flex;
+  height: 250px;
+  margin: auto;
+}
+i {
+  margin: auto;
 }
 @media (max-width: 550px) {
   .poll {
-    width: 375px;
-  }
-  .resp-buttons {
-    left: 0;
-    bottom: 0;
-  }
-  .resp-buttons * {
     width: 100%;
+    height: calc(100vh - 55px);
+    margin: 0;
+    border-radius: 0;
+  }
+  .sharer {
+    margin-left: auto !important;
+  }
+.one {
+  order: 1;
+  margin-top: 35px;
+}
+  .two {
+    order: 0;
+    margin: 5px 5px 5px 5px;
   }
   .copy {
     margin: 0;
+  }
+  .rc-anchor {
+    display: none;
+  }
+  .grecaptcha-badge {
+    display: none;
+  }
+  .share span button {
+    width: 100%;
   }
 }

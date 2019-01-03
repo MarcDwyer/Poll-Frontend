@@ -7,16 +7,20 @@ import * as serviceWorker from './serviceWorker';
 
 import Poll from './components/poll'
 import CreatePoll from './components/create_poll'
+import Nav from './components/nav'
 import Results from './components/results'
  
 // const DOMNode = document.getElementById('renderTarget');
 ReactDOM.render(
 <BrowserRouter>
+<div>
+<Nav />
 <Switch>
     <Route exact path="/poll/survey/:id" component={Poll} />
     <Route exact path="/poll/results/:id" component={Results} />
     <Route path="/" component={CreatePoll} />
 </Switch>
+</div>
 </BrowserRouter>
 ,document.getElementById('root'));
 
