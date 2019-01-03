@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 
 body {
   margin: 0;
@@ -9,12 +8,6 @@ nav {
   box-shadow: none;
   background-color: #ea80fc;
 }
-=======
-body {
-  overflow: hidden;
-}
-
->>>>>>> 2613643084cf254a8026feee5cf762a82c125b71
 .contained {
   background-color: #9FA5B5;
   display: flex;
