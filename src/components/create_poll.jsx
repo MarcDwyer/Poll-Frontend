@@ -44,6 +44,7 @@ export default class CreatePost extends Component {
         }
     }
     render() {
+        console.log(document.location.host)
         if (this.state.isComplete) {
             return (
                 <div>

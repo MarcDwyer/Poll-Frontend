@@ -6,14 +6,17 @@ body {
 }
 nav {
   box-shadow: none;
-  background-color: #ea80fc;
+  background-color: white;
+}
+.navbar-fixed * {
+  color: black !important;
 }
 .contained {
-  background-color: #9FA5B5;
   display: flex;
   height: 100vh;
   width: 100%;
   overflow: hidden;
+  background-color: #9fa5b5;
 }
 .error {
   margin-left: 15px;
@@ -22,7 +25,6 @@ nav {
   width: 550px;
   margin: 125px auto auto auto;
   background-color: white;
-  border-radius: 10px;
   overflow: visible;
   position: relative;
 }
@@ -32,6 +34,7 @@ nav {
 }
 
 .brand-logo {
+  font-family: 'Lobster', cursive;
   margin-left: 15px;
 }
 
@@ -86,11 +89,8 @@ input ::placeholder {
   width: 100%;
 }
 .dropper-btn {
-  background-color: #7A97CC;
+  color: white !important;
   box-shadow: none;
-}
-.dropper-btn:hover {
-  background-color:#55698E;
 }
 .dropper li {
   color: blue;

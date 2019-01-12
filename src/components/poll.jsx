@@ -10,7 +10,7 @@ export default class Poll extends Component {
             isComplete: false,
             submitted: null,
             questions: null,
-            ws: new WebSocket(`wss://${document.location.host}/sockets/${this.props.match.params.id}`),
+            ws: new WebSocket(`wss://${document.location.host}/sockets`),
             error: null
         }
     }
